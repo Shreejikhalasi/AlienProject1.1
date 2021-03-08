@@ -29,7 +29,8 @@ class Aliens:
 
         for y in range(rows_per_screen):
             for x in range(aliens_per_row):
-                alien = Alien(parent=self, game=self.game, number=y // 2, x=alien_width * (4 + 1.5 * x),   # 2//2 = 1.  3//2 = 1
+                alien = Alien(parent=self, game=self.game, number=y // 2, x=alien_width * (4 + 1.5 * x),
+                              # 2//2 = 1.  3//2 = 1
                               y=alien_height * (3 + y))
                 self.alien_group.add(alien)
 
@@ -37,22 +38,27 @@ class Aliens:
         space_x = settings.screen_width - 2 * alien_width
         return int(space_x / (2 * alien_width))
 
-    def rows_per_screen(self, settings, alien_height): return 6
+    def rows_per_screen(self, settings, alien_height):
+        return 6
 
     def add_bullet(self, game, x, y):
         self.bullet_group_that_kill_ship.add(BulletFromAlien(game=game, x=x, y=y))
 
-    def add(self, alien): self.alien_group.add(alien)
+    def add(self, alien):
+        self.alien_group.add(alien)
 
     def add_ship(self, ship):
         self.ship = ship
         self.ship_group.add(self.ship)
 
-    def empty(self): self.alien_group.empty()
+    def empty(self):
+        self.alien_group.empty()
 
-    def group(self): return self.alien_group
+    def group(self):
+        return self.alien_group
 
-    def remove(self, alien): self.alien_group.remove(alien)
+    def remove(self, alien):
+        self.alien_group.remove(alien)
 
     def change_direction(self):
         for alien in self.alien_group:
@@ -105,14 +111,14 @@ class Aliens:
             if alien.rect.bottom <= 0 or alien.reallydead: self.alien_group.remove(alien)
 
     def draw(self):
-        for alien  in self.alien_group:
+        for alien in self.alien_group:
             alien.draw()
         for bullet in self.bullet_group_that_kill_ship:
             bullet.draw()
 
 
-class Alien(Sprite):   # INHERITS from SPRITE
-    images = [[pg.image.load('images/alien' + str(number) + str(i) + '.png') for i in range(2)] for number in range(3)]
+class Alien(Sprite):  # INHERITS from SPRITE
+    images = [[pg.image.load('images/ali' + str(number) + str(i) + '.png') for i in range(2)] for number in range(3)]
     images_boom = [pg.image.load('images/alien_boom' + str(i) + '.png') for i in range(4)]
 
     timers = []
@@ -145,7 +151,11 @@ class Alien(Sprite):   # INHERITS from SPRITE
         if self.dead and not self.timer_switched:
             self.timer = Timer(frames=Alien.images_boom, wait=400, looponce=True)
             self.timer_switched = True
-            self.game.stats.score += self.settings.alien_points * len(self.parent.alien_group)
+            li = self.parent.alien_group
+            length = len(li)
+            for ali in li:
+                print(ali)
+            self.game.stats.score += self.settings.alien_points  # del. * len(self.parent.alien_group)
             self.game.sb.check_high_score(self.game.stats.score)
             self.game.sb.prep_score()
 
